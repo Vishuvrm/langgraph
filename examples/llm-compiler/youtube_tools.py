@@ -70,6 +70,7 @@ def extract_youtube_data(video_url: str) -> dict:
     # You should replace this with actual API calls and data parsing logic.
     # For example, use YouTube Data API or scrape the page for metadata and comments.
     return {
+    "url": video_url,    
     "title": "Sample Title",
     "description": "Sample description of the video.",
     "views": "12345",
