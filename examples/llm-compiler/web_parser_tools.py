@@ -127,7 +127,8 @@ def get_web_parser_tool(llm: ChatOpenAI):
         data_model = extractor.invoke(chain_input, config)
         print("DATA MODEL =", data_model)
         try:
-            return extract_website_content(data_model.website_url)
+            web_content = extract_website_content(data_model.website_url).strip() or SystemMessage("Couldn't parse this url. I think there might be some protection. Please try some other way.")
+            return web_content
         except Exception as e:
             return repr(e)
 
@@ -139,5 +140,5 @@ def get_web_parser_tool(llm: ChatOpenAI):
 
 
 if __name__ == "__main__":
-    r = extract_website_content("https://botgems.com/")
+    r = extract_website_content("https://twitter.com/elonmusk")
     print(r)

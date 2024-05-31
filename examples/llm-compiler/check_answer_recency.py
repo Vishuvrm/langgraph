@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import StructuredTool
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
+from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AIMessage
 from langchain.output_parsers import JsonOutputToolsParser, JsonOutputKeyToolsParser
 from langchain_openai import ChatOpenAI
 from langchain.tools import tool
@@ -46,10 +46,10 @@ def answer_recent_node(messages: List[BaseMessage], config=None):
             except:
                 date_parsed = dateparser.parse(date_str, (r"%d-%m-%Y", r"%d/%m/%Y")).date()
         except:
-            return last_message
+            return [last_message]
         
         if date_parsed >= datetime.today().date():
-            return last_message
-        return f"Thought: The answer seems to be outdated w.r.t. current date, which is {datetime.today().date()}. Please provide the most recent answer. Replan if necessary."
+            return [last_message]
+        return [SystemMessage(content=f"Thought: The answer seems to be outdated w.r.t. current date, which is {datetime.today().date()}. Please provide the most recent answer. Replan if necessary.")]
     else:
-        return last_message
+        return [last_message]
